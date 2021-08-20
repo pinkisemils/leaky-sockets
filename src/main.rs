@@ -2,7 +2,6 @@ use socket2::{Domain, Socket};
 use std::{
     env, io, mem,
     net::{self, *},
-    num::NonZeroU32,
     os::unix::io::{FromRawFd, IntoRawFd, RawFd},
 };
 use futures::prelude::*;
@@ -77,21 +76,5 @@ fn open_socket(addr: SocketAddr) -> io::Result<RawFd> {
     )?;
 
     socket.set_nonblocking(true)?;
-    match best_interface() {
-        Some(iface_index) => {
-            if let Err(err) = socket.bind_device_by_index(Some(iface_index)) {
-                eprintln!("Failed to bind socket: {}", err);
-                return Err(err);
-            }
-        }
-        None => {
-            eprintln!("Failed to get best interface index");
-        }
-    };
     Ok(socket.into_raw_fd())
-}
-
-fn best_interface() -> Option<NonZeroU32> {
-    let best_interface = b"en0\0";
-    NonZeroU32::new(unsafe { libc::if_nametoindex(best_interface.as_ptr() as *const _) })
 }
