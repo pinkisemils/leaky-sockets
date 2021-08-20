@@ -1,0 +1,12 @@
+[package]
+name = "test-handles"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+socket2 = { git = "https://github.com/rust-lang/socket2", rev = "f7023b4c810eb7b0fedf23a1752461c41765c797", features = [ "all" ] }
+tokio = { version = "1.8", features = [ "process", "rt-multi-thread", "fs", "net" ] }
+libc = "*"
+futures = "*"
